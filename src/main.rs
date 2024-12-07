@@ -1,6 +1,10 @@
+#![feature(gen_blocks)]
+
 use std::path::PathBuf;
 
 use anyhow::{Context, Result};
+use log::LevelFilter;
+use simple_logger::SimpleLogger;
 
 mod util;
 
@@ -35,7 +39,7 @@ macro_rules! years {
 
 const CUR_YEAR: usize = 2024;
 
-years!(2024 [1, 2, 3, 4, 5, 6]);
+years!(2024 [1, 2, 3, 4, 5, 6, 7]);
 
 fn main() {
     match run() {
@@ -45,7 +49,10 @@ fn main() {
 }
 
 fn run() -> Result<()> {
-    simple_logger::init()?;
+    SimpleLogger::new()
+        .with_module_level("rustls", LevelFilter::Off)
+        .with_level(LevelFilter::Info)
+        .init()?;
 
     let mut args = std::env::args().skip(1).peekable();
 
