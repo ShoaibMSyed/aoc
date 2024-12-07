@@ -1,8 +1,7 @@
 use std::{collections::{HashMap, HashSet}, time::Instant};
 
 use anyhow::Result;
-use log::info;
-use rayon::iter::{IntoParallelIterator, IntoParallelRefIterator, ParallelBridge, ParallelIterator};
+use rayon::iter::{IntoParallelIterator, ParallelIterator};
 
 use crate::util::{CellIndex, Grid, IntoGrid};
 
@@ -15,25 +14,6 @@ use crate::util::{CellIndex, Grid, IntoGrid};
     }
 
     impl Dir {
-        fn from_char(ch: char) -> Result<Self> {
-            Ok(match ch {
-                '^' => Dir::Up,
-                'v' => Dir::Down,
-                '<' => Dir::Left,
-                '>' => Dir::Right,
-                _ => anyhow::bail!("invalid direction '{ch}'"),
-            })
-        }
-
-        fn to_char(self) -> char {
-            match self {
-                Dir::Up => '^',
-                Dir::Down => 'v',
-                Dir::Left => '<',
-                Dir::Right => '>',
-            }
-        }
-
         fn rotate_right(&mut self) {
             *self = match *self {
                 Dir::Up => Dir::Right,
