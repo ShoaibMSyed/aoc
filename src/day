@@ -1,0 +1,9 @@
+use anyhow::Result;
+
+pub fn part1(input: String) -> Result<()> {
+    Ok(())
+}
+
+pub fn part2(input: String) -> Result<()> {
+    Ok(())
+}
