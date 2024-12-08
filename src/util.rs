@@ -1,6 +1,6 @@
 use std::{
     fmt::Display,
-    ops::{Add, Deref, DerefMut},
+    ops::{Add, AddAssign, Deref, DerefMut, Sub, SubAssign},
 };
 
 use anyhow::{Context, Result};
@@ -339,6 +339,29 @@ impl Add for CellIndex {
             x: self.x + rhs.x,
             y: self.y + rhs.y,
         }
+    }
+}
+
+impl AddAssign for CellIndex {
+    fn add_assign(&mut self, rhs: Self) {
+        *self = *self + rhs;
+    }
+}
+
+impl Sub for CellIndex {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+        }
+    }
+}
+
+impl SubAssign for CellIndex {
+    fn sub_assign(&mut self, rhs: Self) {
+        *self = *self - rhs;
     }
 }
 

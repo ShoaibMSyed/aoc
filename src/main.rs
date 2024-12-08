@@ -1,6 +1,6 @@
 #![feature(gen_blocks)]
 
-use std::path::PathBuf;
+use std::{path::PathBuf, time::Instant};
 
 use anyhow::{Context, Result};
 use log::LevelFilter;
@@ -39,7 +39,7 @@ macro_rules! years {
 
 const CUR_YEAR: usize = 2024;
 
-years!(2024 [1, 2, 3, 4, 5, 6, 7]);
+years!(2024 [1, 2, 3, 4, 5, 6, 7, 8]);
 
 fn main() {
     match run() {
@@ -93,7 +93,19 @@ fn run() -> Result<()> {
         }
     };
 
+    let start = Instant::now();
+
     call(year, day, part, input)?;
+
+    let end = Instant::now();
+
+    let duration = end - start;
+
+    if duration.as_secs() < 5 {
+        println!("ran in {:.3} millis", duration.as_micros() as f64 / 1000.0);
+    } else {
+        println!("ran in {:.3} seconds", duration.as_secs_f64());
+    }    
 
     Ok(())
 }
