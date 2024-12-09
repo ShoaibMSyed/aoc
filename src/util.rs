@@ -36,6 +36,18 @@ impl<'a> Reader<'a> {
         Ok(ident)
     }
 
+    pub fn digit(&mut self) -> Result<usize> {
+        self.skip_whitespace();
+
+        let digit = self.take(1);
+
+        if digit.is_empty() || !digit.chars().next().unwrap().is_ascii_digit() {
+            anyhow::bail!("digit not found");
+        }
+
+        Ok(digit.parse().unwrap())
+    }
+
     pub fn unsigned(&mut self) -> Result<usize> {
         self.skip_whitespace();
 
