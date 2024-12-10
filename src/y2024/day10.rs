@@ -25,8 +25,7 @@ fn generate_path(grid: &Grid, start: CellIndex) -> (HashSet<CellIndex>, usize) {
 
         path.insert(cur);
 
-        for adj in cur.cardinal() {
-            if !grid.contains(adj) { continue }
+        for (adj, _) in grid.cardinal(cur) {
             stack.push((adj, (search_val as u8 + 1) as char));
         }
     }
