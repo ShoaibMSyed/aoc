@@ -327,6 +327,45 @@ impl CellIndex {
 
         Iter { cur: CellIndex::default(), size: grid.size() }
     }
+    
+    pub fn surrounding(self) -> impl Iterator<Item = Self> {
+        struct Iter {
+            offset: CellIndex,
+            mid: CellIndex,
+        }
+
+        impl Iterator for Iter {
+            type Item = CellIndex;
+
+            fn next(&mut self) -> Option<Self::Item> {
+                if self.offset.x > 1 || self.offset.y > 1 {
+                    return None;
+                }
+
+                let ret = self.mid + self.offset;
+
+                self.offset.x += 1;
+                if self.offset.x == 0 && self.offset.y == 0 {
+                    self.offset.x += 1;
+                }
+                if self.offset.x > 1 {
+                    self.offset.x = -1;
+                    self.offset.y += 1;
+                }
+
+                Some(ret)
+            }
+        }
+
+        Iter { offset: CellIndex { x: -1, y: -1 }, mid: self }
+    }
+
+    pub fn cardinal(self) -> impl Iterator<Item = Self> {
+        [[-1isize, 0], [0, -1], [1, 0], [0, 1]]
+            .map(CellIndex::from)
+            .map(|i| self + i)
+            .into_iter()
+    }
 }
 
 impl Deref for CellIndex {
@@ -432,7 +471,7 @@ impl Display for CellIndex {
 }
 
 #[derive(Clone)]
-pub struct Grid<T> {
+pub struct Grid<T = char> {
     values: Vec<T>,
     width: isize,
     height: isize,
@@ -525,8 +564,11 @@ impl<T> Grid<T> {
     }
 
     fn to_index(&self, i: impl Into<CellIndex>) -> Option<usize> {
-        let CellIndex { x, y } = i.into();
-        if x < 0 || y < 0 { return None; }
+        let i = i.into();
+        let CellIndex { x, y } = i;
+
+        if !self.contains(i) { return None; }
+
         Some(y as usize * self.width as usize + x as usize)
     }
 }
