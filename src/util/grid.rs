@@ -39,35 +39,14 @@ impl CellIndex {
     }
     
     pub fn surrounding(self) -> impl Iterator<Item = Self> {
-        struct Iter {
-            offset: CellIndex,
-            mid: CellIndex,
-        }
-
-        impl Iterator for Iter {
-            type Item = CellIndex;
-
-            fn next(&mut self) -> Option<Self::Item> {
-                if self.offset.x > 1 || self.offset.y > 1 {
-                    return None;
-                }
-
-                let ret = self.mid + self.offset;
-
-                self.offset.x += 1;
-                if self.offset.x == 0 && self.offset.y == 0 {
-                    self.offset.x += 1;
-                }
-                if self.offset.x > 1 {
-                    self.offset.x = -1;
-                    self.offset.y += 1;
-                }
-
-                Some(ret)
-            }
-        }
-
-        Iter { offset: CellIndex { x: -1, y: -1 }, mid: self }
+        [
+            [-1, -1], [0, -1], [1, -1],
+            [-1, 0isize], [1, 0],
+            [-1, 1], [0, 1], [1, 1],
+        ]
+            .map(CellIndex::from)
+            .map(|i| self + i)
+            .into_iter()
     }
 
     pub fn cardinal(self) -> impl Iterator<Item = Self> {
