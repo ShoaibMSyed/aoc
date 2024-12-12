@@ -39,7 +39,7 @@ macro_rules! years {
 
 const CUR_YEAR: usize = 2024;
 
-years!(2024 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+years!(2024 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
 
 fn main() {
     match run() {
