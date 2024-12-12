@@ -6,7 +6,7 @@ use anyhow::{Context, Result};
 use log::LevelFilter;
 use simple_logger::SimpleLogger;
 
-mod util;
+pub mod util;
 
 macro_rules! years {
     ($($year:literal [ $($day:literal),* $(,)? ]),* $(,)?) => {
